@@ -11,6 +11,6 @@ public interface LoginView {
 
     void setUserError();
 
-    void goToProfile();
+    void goToProfile(String mId);
 
 }

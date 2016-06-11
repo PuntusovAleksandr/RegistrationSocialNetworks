@@ -18,4 +18,5 @@ public class StaticParams {
 
     public static final long VERSION_DB = 1;
 
+    public static final String ID_USER = "id_user";
 }

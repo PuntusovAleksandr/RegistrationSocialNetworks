@@ -93,9 +93,9 @@ public class LoginPresenterImpl implements LoginPresenter {
         }
     }
 
-    private void goToProfile() {
+    private void goToProfile(String mId) {
         if (mLoginView != null) {
-            mLoginView.goToProfile();
+            mLoginView.goToProfile(mId);
         }
     }
 
@@ -146,7 +146,7 @@ public class LoginPresenterImpl implements LoginPresenter {
                                                 if (mUser != null) {
                                                     mRealm = RealmImpl.getInstance(mContext);
                                                     mRealm.putUserInDb(mUser, StaticParams.FB);
-                                                    goToProfile();
+                                                    goToProfile(mUser.getId());
                                                 } else errorUser();
                                                 System.out.println("JSONObject  :::: " + object);
                                                 System.out.println("GraphResponse  :::: " + response);

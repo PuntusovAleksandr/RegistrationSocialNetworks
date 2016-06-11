@@ -11,9 +11,6 @@ import com.aleksandrp.registrationinsocialnetworks.R;
 import com.aleksandrp.registrationinsocialnetworks.profile.ProfileActivity;
 import com.aleksandrp.registrationinsocialnetworks.utils.StaticParams;
 import com.aleksandrp.registrationinsocialnetworks.utils.UtilsApp;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
 
 public class MainActivity extends AppCompatActivity implements LoginView, View.OnClickListener {
 
@@ -89,8 +86,9 @@ public class MainActivity extends AppCompatActivity implements LoginView, View.O
 
 
     @Override
-    public void goToProfile() {
+    public void goToProfile(String mId) {
         Intent mIntent = new Intent(MainActivity.this, ProfileActivity.class);
+        mIntent.putExtra(StaticParams.ID_USER, mId);
         startActivity(mIntent);
     }
 
