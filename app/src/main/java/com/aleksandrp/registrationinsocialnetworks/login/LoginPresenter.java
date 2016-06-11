@@ -18,4 +18,6 @@ public interface LoginPresenter {
     void onDestroy();
 
     void onActivityResultFB(int mRequestCode, int mResultCode, Intent mData);
+
+    void onActivityResultVK(int mRequestCode, int mResultCode, Intent mData);
 }

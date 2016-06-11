@@ -3,7 +3,6 @@ package com.aleksandrp.registrationinsocialnetworks.login;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
 import com.aleksandrp.registrationinsocialnetworks.entity.User;
 import com.aleksandrp.registrationinsocialnetworks.realm.ServiceRealm;
 import com.aleksandrp.registrationinsocialnetworks.realm.inpl.RealmImpl;
@@ -18,7 +17,18 @@ import com.facebook.GraphResponse;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.vk.sdk.VKAccessToken;
+import com.vk.sdk.VKCallback;
+import com.vk.sdk.VKScope;
+import com.vk.sdk.VKSdk;
+import com.vk.sdk.api.VKApi;
+import com.vk.sdk.api.VKApiConst;
+import com.vk.sdk.api.VKError;
+import com.vk.sdk.api.VKParameters;
+import com.vk.sdk.api.VKRequest;
+import com.vk.sdk.api.VKResponse;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -43,10 +53,8 @@ public class LoginPresenterImpl implements LoginPresenter {
 
     @Override
     public void connectToFB(final Context mContext, String socNetwork) {
-
         showProgress();
         registeredFaceBook(mContext);
-
     }
 
 
@@ -58,6 +66,10 @@ public class LoginPresenterImpl implements LoginPresenter {
     @Override
     public void connectToVK(String socNetwork) {
         showProgress();
+        // add permissions
+        String[] scope = new String[]{
+                VKScope.EMAIL, VKScope.DIRECT, VKScope.NOHTTPS, VKScope.NOTIFY, VKScope.STATS};
+        VKSdk.login((MainActivity) mContext, scope);
     }
 
     @Override
@@ -73,6 +85,69 @@ public class LoginPresenterImpl implements LoginPresenter {
     @Override
     public void onActivityResultFB(int mRequestCode, int mResultCode, Intent mData) {
         mCallbackManager.onActivityResult(mRequestCode, mResultCode, mData);
+    }
+
+    @Override
+    public void onActivityResultVK(int mRequestCode, int mResultCode, Intent mData) {
+        if (!VKSdk.onActivityResult(mRequestCode, mResultCode, mData,
+                new VKCallback<VKAccessToken>() {
+                    @Override
+                    public void onResult(VKAccessToken res) {
+                        // register successful
+                        registerSuccessfulVK(res);
+                    }
+
+                    @Override
+                    public void onError(VKError error) {
+                        // error authorisation
+                        hideProgress();
+                        errorUser();
+                    }
+                })) {
+        }
+    }
+
+    private void registerSuccessfulVK(final VKAccessToken res) {
+        VKRequest request =
+                VKApi.users().get(VKParameters.from(VKApiConst.FIELDS, "bdate, photo_max_orig"));
+        request.executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                JSONObject mJsonAll = response.json;
+                try {
+                    JSONArray mResponse = mJsonAll.getJSONArray("response");
+                    JSONObject mJson = mResponse.getJSONObject(0);
+                    mUser = new User(
+                            res.userId,
+                            mJson.getString("first_name") + " " + mJson.getString("last_name"),
+                            res.email,
+                            mJson.getString("bdate"),
+                            mJson.getString("photo_max_orig")
+                    );
+                } catch (JSONException mE) {
+                    mE.printStackTrace();
+                }
+
+                hideProgress();
+                if (mUser != null) {
+                    mRealm = RealmImpl.getInstance(mContext);
+                    mRealm.putUserInDb(mUser, StaticParams.VK);
+                    goToProfile(mUser.getId());
+                } else errorUser();
+            }
+
+            @Override
+            public void onError(VKError error) {
+                hideProgress();
+                errorUser();
+            }
+
+            @Override
+            public void attemptFailed(VKRequest request, int attemptNumber, int totalAttempts) {
+                hideProgress();
+                errorUser();
+            }
+        });
     }
 
     private void showProgress() {
@@ -100,7 +175,6 @@ public class LoginPresenterImpl implements LoginPresenter {
     }
 
 
-
     private void registeredFaceBook(final Context mContext) {
         // init FB
         FacebookSdk.sdkInitialize(mContext.getApplicationContext());
@@ -108,12 +182,11 @@ public class LoginPresenterImpl implements LoginPresenter {
         mCallbackManager = CallbackManager.Factory.create();
 
 //        String pic_link="https://graph.facebook.com/" + id + "/picture?type=large";
-//        String pic_link="https://graph.facebook.com/1780016435564535/picture?type=large";
 
         LoginManager mInstance = LoginManager.getInstance();
         mInstance
                 .logInWithReadPermissions((MainActivity) mContext,
-                        Arrays.asList("public_profile", "user_friends","email","user_birthday" ));
+                        Arrays.asList("public_profile", "user_friends", "email", "user_birthday"));
         mInstance
                 .registerCallback(mCallbackManager,
                         new FacebookCallback<LoginResult>() {
@@ -148,8 +221,6 @@ public class LoginPresenterImpl implements LoginPresenter {
                                                     mRealm.putUserInDb(mUser, StaticParams.FB);
                                                     goToProfile(mUser.getId());
                                                 } else errorUser();
-                                                System.out.println("JSONObject  :::: " + object);
-                                                System.out.println("GraphResponse  :::: " + response);
                                             }
                                         });
                                 Bundle parameters = new Bundle();

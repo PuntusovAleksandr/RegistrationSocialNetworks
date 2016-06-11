@@ -1,6 +1,8 @@
 <resources>
     <string name="facebook_app_id">251641805198523</string>
+    <integer name="com_vk_sdk_AppId">5503945</integer>
 
     <string name="app_name">Registration in social networks</string>
     <string name="user_not_validation">Username not valid</string>
+    <string name="check_internet">Please check your internet connection state</string>
 </resources>

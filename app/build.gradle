@@ -39,4 +39,6 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.0.0-beta3'
     // realm
     compile 'io.realm:realm-android:0.87.5'
+    // vk
+    compile 'com.vk:androidsdk:1.6.5'
 }

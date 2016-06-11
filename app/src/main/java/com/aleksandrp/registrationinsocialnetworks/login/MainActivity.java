@@ -94,12 +94,18 @@ public class MainActivity extends AppCompatActivity implements LoginView, View.O
 
     @Override
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+
         if (resultCode == RESULT_OK) {
             if (requestCode == StaticParams.FB_CODE) {
                 presenter.onActivityResultFB(requestCode, resultCode, data);
             }
+            if (requestCode == StaticParams.VK_CODE) {
+                presenter.onActivityResultVK(requestCode, resultCode, data);
+            }
         }
+
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
 }
