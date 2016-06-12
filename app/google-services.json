@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "331535209657",
+    "project_id": "social-networks-example"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:331535209657:android:b1d8b2b016182ce9",
+        "android_client_info": {
+          "package_name": "com.aleksandrp.registrationinsocialnetworks"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "331535209657-7so0a0dp72be91pajvkkg6ntmmacjjho.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.aleksandrp.registrationinsocialnetworks",
+            "certificate_hash": "C162A1639DCA216720083871B650521547BEADBC"
+          }
+        },
+        {
+          "client_id": "331535209657-gphus9i9l0p9qj03bcicel6cfj85mjs3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBY8BAAgtfy6wGo7War-Nd9CvvekxwZAn4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -105,6 +105,9 @@ public class MainActivity extends AppCompatActivity implements LoginView, View.O
             if (requestCode == StaticParams.GOOGLE_CODE) {
                 presenter.onActivityResultGoogle(requestCode, resultCode, data);
             }
+            if (requestCode == StaticParams.TWITTER_CODE) {
+                presenter.onActivityResultTwitter(requestCode, resultCode, data);
+            }
         }
 
 

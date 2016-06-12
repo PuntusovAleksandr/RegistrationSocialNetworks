@@ -25,6 +25,15 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.twitter.sdk.android.Twitter;
+import com.twitter.sdk.android.core.Callback;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterCore;
+import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.identity.TwitterLoginButton;
+import com.twitter.sdk.android.core.services.AccountService;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
 import com.vk.sdk.VKScope;
@@ -44,6 +53,9 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 
+import io.fabric.sdk.android.Fabric;
+import retrofit.http.Query;
+
 /**
  * Created by AleksandrP on 11.06.2016.
  */
@@ -54,6 +66,7 @@ public class LoginPresenterImpl implements LoginPresenter {
     private Context mContext;
     private User mUser = null;
     private ServiceRealm mRealm;
+    private TwitterLoginButton mLoginButton;
 
 
     public LoginPresenterImpl(Context mContext, LoginView mLoginView) {
@@ -71,6 +84,36 @@ public class LoginPresenterImpl implements LoginPresenter {
     @Override
     public void connectToTwitter(String socNetwork) {
         showProgress();
+
+        TwitterAuthConfig authConfig =  new TwitterAuthConfig(
+                mContext.getResources().getString(R.string.TWITTER_KEY),
+                mContext.getResources().getString(R.string.TWITTER_SECRET));
+        Fabric.with(mContext, new TwitterCore(authConfig));
+
+
+        mLoginButton = new TwitterLoginButton(mContext);
+        mLoginButton.setCallback(new Callback<TwitterSession>() {
+            @Override
+            public void success(Result<TwitterSession> result) {
+                hideProgress();
+                System.out.println("Result<TwitterSession> :::: " + result.toString());
+                System.out.println("Result<TwitterSession> :::: " + result.data.toString());
+                System.out.println("Result<TwitterSession> :::: " + result.data.getUserName());
+                System.out.println("Result<TwitterSession> :::: " + result.data.getUserId());
+
+            }
+
+            @Override
+            public void failure(TwitterException exception) {
+                System.out.println("TwitterException :::::: " + exception);
+                hideProgress();
+                errorUser();
+            }
+        });
+        mLoginButton.performClick();
+
+
+
     }
 
     @Override
@@ -157,6 +200,10 @@ public class LoginPresenterImpl implements LoginPresenter {
         }
     }
 
+    @Override
+    public void onActivityResultTwitter(int mRequestCode, int mResultCode, Intent mData) {
+        mLoginButton.onActivityResult(mRequestCode,mResultCode, mData );
+    }
 
 
     private void registerSuccessfulVK(final VKAccessToken res) {

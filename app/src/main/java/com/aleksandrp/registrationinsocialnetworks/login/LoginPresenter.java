@@ -22,4 +22,6 @@ public interface LoginPresenter {
     void onActivityResultVK(int mRequestCode, int mResultCode, Intent mData);
 
     void onActivityResultGoogle(int mRequestCode, int mResultCode, Intent mData);
+
+    void onActivityResultTwitter(int mRequestCode, int mResultCode, Intent mData);
 }
