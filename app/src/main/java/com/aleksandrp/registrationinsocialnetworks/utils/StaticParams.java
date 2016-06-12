@@ -12,11 +12,13 @@ public class StaticParams {
 
     public static final int FB_CODE = 64206;
     public static final int VK_CODE = 10485;
+    public static final int GOOGLE_CODE = 222;
 
 
     public static final String URL_FB = "https://graph.facebook.com/";
-    public static final String BASE_URL_VK = "https://api.vk.com/method/";
 
+    public static final String BASE_URL_VK = "https://api.vk.com/method/";
     public static final long VERSION_DB = 1;
     public static final String ID_USER = "id_user";
+
 }

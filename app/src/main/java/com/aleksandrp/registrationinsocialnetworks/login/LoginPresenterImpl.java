@@ -3,6 +3,8 @@ package com.aleksandrp.registrationinsocialnetworks.login;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+
+import com.aleksandrp.registrationinsocialnetworks.R;
 import com.aleksandrp.registrationinsocialnetworks.entity.User;
 import com.aleksandrp.registrationinsocialnetworks.realm.ServiceRealm;
 import com.aleksandrp.registrationinsocialnetworks.realm.inpl.RealmImpl;
@@ -17,6 +19,12 @@ import com.facebook.GraphResponse;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
 import com.vk.sdk.VKScope;
@@ -32,7 +40,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 
 /**
  * Created by AleksandrP on 11.06.2016.
@@ -75,6 +85,27 @@ public class LoginPresenterImpl implements LoginPresenter {
     @Override
     public void connectToGOOGLE(String socNetwork) {
         showProgress();
+
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
+        GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(mContext)
+                .enableAutoManage((MainActivity) mContext, new GoogleApiClient.OnConnectionFailedListener() {
+                    @Override
+                    public void onConnectionFailed(ConnectionResult mConnectionResult) {
+
+                    }
+                })
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+
+        MainActivity mMainActivity = (MainActivity) mContext;
+        if (mMainActivity != null) {
+            Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+            mMainActivity.startActivityForResult(signInIntent, StaticParams.GOOGLE_CODE);
+        }
     }
 
     @Override
@@ -107,6 +138,27 @@ public class LoginPresenterImpl implements LoginPresenter {
         }
     }
 
+    @Override
+    public void onActivityResultGoogle(int mRequestCode, int mResultCode, Intent mData) {
+        hideProgress();
+        GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(mData);
+        if (result.isSuccess()) {
+            GoogleSignInAccount acct = result.getSignInAccount();
+            mUser = new User();
+            mUser.setId(acct.getId());
+            mUser.setE_mail(acct.getEmail());
+            mUser.setName(acct.getDisplayName());
+            mUser.setIcon(String.valueOf(acct.getPhotoUrl()));
+            mUser.setBirth(new SimpleDateFormat("dd.MM.yyyy").format(new Date()));
+
+            saveInDb();
+        } else {
+            errorUser();
+        }
+    }
+
+
+
     private void registerSuccessfulVK(final VKAccessToken res) {
         VKRequest request =
                 VKApi.users().get(VKParameters.from(VKApiConst.FIELDS, "bdate, photo_max_orig"));
@@ -130,9 +182,7 @@ public class LoginPresenterImpl implements LoginPresenter {
 
                 hideProgress();
                 if (mUser != null) {
-                    mRealm = RealmImpl.getInstance(mContext);
-                    mRealm.putUserInDb(mUser, StaticParams.VK);
-                    goToProfile(mUser.getId());
+                    saveInDb();
                 } else errorUser();
             }
 
@@ -217,9 +267,7 @@ public class LoginPresenterImpl implements LoginPresenter {
                                                     mE.printStackTrace();
                                                 }
                                                 if (mUser != null) {
-                                                    mRealm = RealmImpl.getInstance(mContext);
-                                                    mRealm.putUserInDb(mUser, StaticParams.FB);
-                                                    goToProfile(mUser.getId());
+                                                    saveInDb();
                                                 } else errorUser();
                                             }
                                         });
@@ -242,5 +290,15 @@ public class LoginPresenterImpl implements LoginPresenter {
                                 errorUser();
                             }
                         });
+    }
+
+    /**
+     * save in DB
+     */
+    private void saveInDb() {
+        mRealm = RealmImpl.getInstance(mContext);
+        mRealm.putUserInDb(mUser, StaticParams.VK);
+        goToProfile(mUser.getId());
+        mUser = null;
     }
 }

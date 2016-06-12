@@ -5,4 +5,7 @@
     <string name="app_name">Registration in social networks</string>
     <string name="user_not_validation">Username not valid</string>
     <string name="check_internet">Please check your internet connection state</string>
+
+    <string name="btn_logout_from_google">Logout from Google</string>
+    <string name="btn_revoke_access">Revoke Access</string>
 </resources>

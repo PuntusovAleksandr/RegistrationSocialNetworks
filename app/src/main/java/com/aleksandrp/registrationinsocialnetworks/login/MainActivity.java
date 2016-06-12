@@ -102,6 +102,9 @@ public class MainActivity extends AppCompatActivity implements LoginView, View.O
             if (requestCode == StaticParams.VK_CODE) {
                 presenter.onActivityResultVK(requestCode, resultCode, data);
             }
+            if (requestCode == StaticParams.GOOGLE_CODE) {
+                presenter.onActivityResultGoogle(requestCode, resultCode, data);
+            }
         }
 
 

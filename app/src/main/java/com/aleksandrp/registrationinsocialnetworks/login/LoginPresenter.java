@@ -20,4 +20,6 @@ public interface LoginPresenter {
     void onActivityResultFB(int mRequestCode, int mResultCode, Intent mData);
 
     void onActivityResultVK(int mRequestCode, int mResultCode, Intent mData);
+
+    void onActivityResultGoogle(int mRequestCode, int mResultCode, Intent mData);
 }
