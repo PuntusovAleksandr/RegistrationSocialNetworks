@@ -25,14 +25,16 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.twitter.sdk.android.Twitter;
+import com.google.android.gms.common.server.converter.StringToIntConverter;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterApiClient;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
+import com.twitter.sdk.android.core.models.Tweet;
 import com.twitter.sdk.android.core.services.AccountService;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
@@ -52,9 +54,9 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import io.fabric.sdk.android.Fabric;
-import retrofit.http.Query;
 
 /**
  * Created by AleksandrP on 11.06.2016.
@@ -94,13 +96,29 @@ public class LoginPresenterImpl implements LoginPresenter {
         mLoginButton = new TwitterLoginButton(mContext);
         mLoginButton.setCallback(new Callback<TwitterSession>() {
             @Override
-            public void success(Result<TwitterSession> result) {
+            public void success(Result<TwitterSession> resultBt) {
                 hideProgress();
-                System.out.println("Result<TwitterSession> :::: " + result.toString());
-                System.out.println("Result<TwitterSession> :::: " + result.data.toString());
-                System.out.println("Result<TwitterSession> :::: " + result.data.getUserName());
-                System.out.println("Result<TwitterSession> :::: " + result.data.getUserId());
-
+                TwitterApiClient twitterApiClient = TwitterCore.getInstance().getApiClient();
+                AccountService statusesService = twitterApiClient.getAccountService();
+                statusesService
+                        .verifyCredentials(true, true, new Callback<com.twitter.sdk.android.core.models.User>() {
+                            @Override
+                            public void success(Result<com.twitter.sdk.android.core.models.User> result) {
+                                mUser = new User(
+                                        String.valueOf(result.data.id),
+                                        result.data.name,
+                                        String.valueOf(result.data.email),
+                                        result.data.createdAt,
+                                        result.data.profileImageUrl
+                                );
+                                saveInDb();
+                            }
+                            @Override
+                            public void failure(TwitterException exception) {
+                                hideProgress();
+                                errorUser();
+                            }
+                        });
             }
 
             @Override
