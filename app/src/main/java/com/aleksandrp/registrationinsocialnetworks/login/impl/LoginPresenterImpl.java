@@ -365,7 +365,9 @@ public class LoginPresenterImpl implements LoginPresenter {
      */
     private void saveInDb() {
         mRealm = RealmImpl.getInstance(mContext);
-        mRealm.putUserInDb(mUser, StaticParams.VK);
+        if (mRealm.isUserEmpry(mUser.getId())) {
+            mRealm.putUserInDb(mUser, StaticParams.VK);
+        }
         goToProfile(mUser.getId());
         mUser = null;
     }

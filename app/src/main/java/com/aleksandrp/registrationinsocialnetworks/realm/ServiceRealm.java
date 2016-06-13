@@ -14,4 +14,6 @@ public interface ServiceRealm {
     void removeUser(String mI);
 
     void editUser(User mUser);
+
+    boolean isUserEmpry(String mId);
 }

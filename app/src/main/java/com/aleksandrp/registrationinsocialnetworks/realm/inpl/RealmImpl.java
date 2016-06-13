@@ -105,4 +105,11 @@ public class RealmImpl implements ServiceRealm {
         realm.commitTransaction();
     }
 
+    @Override
+    public boolean isUserEmpry(String mId) {
+        return realm.where(UserRealm.class)
+                .equalTo("id", mId)
+                .findFirst() == null;
+    }
+
 }
