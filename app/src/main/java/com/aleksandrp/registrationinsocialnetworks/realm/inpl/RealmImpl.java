@@ -80,6 +80,16 @@ public class RealmImpl implements ServiceRealm {
     @Override
     public void removeUser(String mI) {
         // TODO: 13.06.2016 remove user
+        final UserRealm mUserRealm = realm.where(UserRealm.class)
+                .equalTo("id", mI)
+                .findFirst();
+
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+               mUserRealm.removeFromRealm();
+            }
+        });
     }
 
 }

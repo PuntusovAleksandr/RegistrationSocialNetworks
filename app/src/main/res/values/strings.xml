@@ -18,4 +18,5 @@
     <string name="birth_day">Birth day</string>
     <string name="social_network">Social network</string>
     <string name="delete_user">DELETE USER</string>
+    <string name="edit">EDIT</string>
 </resources>

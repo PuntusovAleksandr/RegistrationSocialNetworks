@@ -37,6 +37,7 @@ public class ProfileActivity extends AppCompatActivity implements
 
     private void initUi() {
         findViewById(R.id.bt_delete).setOnClickListener(this);
+        findViewById(R.id.bt_edit).setOnClickListener(this);
 
         ivIcon = (ImageView) findViewById(R.id.iv_icon);
 
@@ -49,8 +50,15 @@ public class ProfileActivity extends AppCompatActivity implements
     @Override
     public void onClick(View v) {
         UtilsApp.disableDoubleClick(v);
-        mPresenter.deleteUser(ProfileActivity.this, tvId.getText().toString());
-        finish();
+        switch (v.getId()) {
+            case R.id.bt_delete:
+                mPresenter.deleteUser(ProfileActivity.this, tvId.getText().toString());
+                finish();
+                break;
+            case R.id.bt_edit:
+
+                break;
+        }
     }
 
     @Override

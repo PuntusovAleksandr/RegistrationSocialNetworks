@@ -121,13 +121,28 @@
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/bt_delete"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:text="@string/delete_user"/>
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
+            <Button
+                android:id="@+id/bt_delete"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_weight="1"
+                android:text="@string/delete_user"/>
+
+            <Button
+                android:id="@+id/bt_edit"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_weight="1"
+                android:text="@string/edit"/>
+
+        </LinearLayout>
     </LinearLayout>
 
 
