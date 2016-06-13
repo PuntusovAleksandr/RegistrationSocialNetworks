@@ -64,9 +64,9 @@ public class RealmImpl implements ServiceRealm {
     }
 
     @Override
-    public User getUserFromDb(String keySocialNetwork) {
+    public User getUserFromDb(String userId) {
         UserRealm userRrealm = realm.where(UserRealm.class)
-                .equalTo("key_network", keySocialNetwork)
+                .equalTo("id", userId)
                 .findFirst();
         return new User(
                 String.valueOf(userRrealm.getId()),
@@ -75,6 +75,11 @@ public class RealmImpl implements ServiceRealm {
                 userRrealm.getBirth(),
                 userRrealm.getIcon()
         );
+    }
+
+    @Override
+    public void removeUser(String mI) {
+        // TODO: 13.06.2016 remove user
     }
 
 }

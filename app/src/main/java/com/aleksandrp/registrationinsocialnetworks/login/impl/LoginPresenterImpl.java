@@ -1,4 +1,4 @@
-package com.aleksandrp.registrationinsocialnetworks.login;
+package com.aleksandrp.registrationinsocialnetworks.login.impl;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,6 +6,9 @@ import android.os.Bundle;
 
 import com.aleksandrp.registrationinsocialnetworks.R;
 import com.aleksandrp.registrationinsocialnetworks.entity.User;
+import com.aleksandrp.registrationinsocialnetworks.login.LoginPresenter;
+import com.aleksandrp.registrationinsocialnetworks.login.LoginView;
+import com.aleksandrp.registrationinsocialnetworks.login.MainActivity;
 import com.aleksandrp.registrationinsocialnetworks.realm.ServiceRealm;
 import com.aleksandrp.registrationinsocialnetworks.realm.inpl.RealmImpl;
 import com.aleksandrp.registrationinsocialnetworks.utils.StaticParams;

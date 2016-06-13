@@ -9,5 +9,7 @@ public interface ServiceRealm {
 
     void putUserInDb(User mUser, String keySocialNetwork);
 
-    User getUserFromDb(String keySocialNetwork);
+    User getUserFromDb(String userId);
+
+    void removeUser(String mI);
 }

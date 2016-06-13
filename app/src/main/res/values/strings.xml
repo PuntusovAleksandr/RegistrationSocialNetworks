@@ -12,4 +12,10 @@
 
     <string name="btn_logout_from_google">Logout from Google</string>
     <string name="btn_revoke_access">Revoke Access</string>
+    <string name="id_user">Id user</string>
+    <string name="name_user">Name user</string>
+    <string name="e_mail">E_mail</string>
+    <string name="birth_day">Birth day</string>
+    <string name="social_network">Social network</string>
+    <string name="delete_user">DELETE USER</string>
 </resources>

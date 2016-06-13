@@ -8,6 +8,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.aleksandrp.registrationinsocialnetworks.R;
+import com.aleksandrp.registrationinsocialnetworks.login.impl.LoginPresenterImpl;
 import com.aleksandrp.registrationinsocialnetworks.profile.ProfileActivity;
 import com.aleksandrp.registrationinsocialnetworks.utils.StaticParams;
 import com.aleksandrp.registrationinsocialnetworks.utils.UtilsApp;
@@ -25,11 +26,12 @@ public class MainActivity extends AppCompatActivity implements LoginView, View.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        // init FB
-//        FacebookSdk.sdkInitialize(getApplicationContext());
-//        AppEventsLogger.activateApp(this);
-//        callbackManager = CallbackManager.Factory.create();
+        initUi();
 
+        presenter = new LoginPresenterImpl(MainActivity.this, this);
+    }
+
+    private void initUi() {
         validation = (TextView) findViewById(R.id.validation);
         mProgressBar = (ProgressBar) findViewById(R.id.progress_main);
 
@@ -37,8 +39,6 @@ public class MainActivity extends AppCompatActivity implements LoginView, View.O
         findViewById(R.id.ib_twitter).setOnClickListener(this);
         findViewById(R.id.ib_vk).setOnClickListener(this);
         findViewById(R.id.ib_google).setOnClickListener(this);
-
-        presenter = new LoginPresenterImpl(MainActivity.this, this);
     }
 
     @Override
