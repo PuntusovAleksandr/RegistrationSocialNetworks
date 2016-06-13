@@ -9,4 +9,7 @@ public interface ProfileView {
 
     void showAllParams(User mUser);
 
+    void showDialog(User mUser);
+
+    void updateUi();
 }

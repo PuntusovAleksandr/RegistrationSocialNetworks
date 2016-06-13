@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aleksandrp.registrationinsocialnetworks.R;
+import com.aleksandrp.registrationinsocialnetworks.dialog.DialogEdit;
 import com.aleksandrp.registrationinsocialnetworks.entity.User;
 import com.aleksandrp.registrationinsocialnetworks.profile.impl.ProfilePresenterImpl;
 import com.aleksandrp.registrationinsocialnetworks.utils.StaticParams;
@@ -21,6 +22,9 @@ public class ProfileActivity extends AppCompatActivity implements
 
     private ProfilePresenter mPresenter;
 
+    private User mUser;
+    private String id;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +33,7 @@ public class ProfileActivity extends AppCompatActivity implements
 
         initUi();
 
-        String id = getIntent().getStringExtra(StaticParams.ID_USER);
+        id = getIntent().getStringExtra(StaticParams.ID_USER);
 
         mPresenter = new ProfilePresenterImpl();
         mPresenter.loadDataFromDb(ProfileActivity.this, this, id);
@@ -52,17 +56,18 @@ public class ProfileActivity extends AppCompatActivity implements
         UtilsApp.disableDoubleClick(v);
         switch (v.getId()) {
             case R.id.bt_delete:
-                mPresenter.deleteUser(ProfileActivity.this, tvId.getText().toString());
+                mPresenter.deleteUser(ProfileActivity.this, mUser.getId());
                 finish();
                 break;
             case R.id.bt_edit:
-
+                mPresenter.showDialogEdit(mUser);
                 break;
         }
     }
 
     @Override
     public void showAllParams(User mUser) {
+        this.mUser = mUser;
         Picasso.with(ProfileActivity.this)
                 .load(mUser.getIcon())
                 .error(R.mipmap.ic_launcher)
@@ -72,5 +77,15 @@ public class ProfileActivity extends AppCompatActivity implements
         tvName.setText(mUser.getName());
         tvEmail.setText(mUser.getE_mail());
         tvBirth.setText(mUser.getBirth());
+    }
+
+    @Override
+    public void showDialog(User mUser) {
+        new DialogEdit(ProfileActivity.this, mUser, this, mPresenter).show();
+    }
+
+    @Override
+    public void updateUi() {
+        mPresenter.loadDataFromDb(ProfileActivity.this, this, id);
     }
 }

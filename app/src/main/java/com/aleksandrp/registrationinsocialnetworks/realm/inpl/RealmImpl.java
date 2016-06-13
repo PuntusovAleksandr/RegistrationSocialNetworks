@@ -87,9 +87,22 @@ public class RealmImpl implements ServiceRealm {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-               mUserRealm.removeFromRealm();
+                mUserRealm.removeFromRealm();
             }
         });
+    }
+
+    @Override
+    public void editUser(User mUser) {
+        realm.beginTransaction();
+        UserRealm mUserRealm = realm.where(UserRealm.class)
+                .equalTo("id", mUser.getId())
+                .findFirst();
+
+        mUserRealm.setName(mUser.getName());
+        mUserRealm.setBirth(mUser.getBirth());
+        mUserRealm.setE_mail(mUser.getE_mail());
+        realm.commitTransaction();
     }
 
 }

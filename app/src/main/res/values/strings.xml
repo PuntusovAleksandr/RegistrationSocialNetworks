@@ -19,4 +19,6 @@
     <string name="social_network">Social network</string>
     <string name="delete_user">DELETE USER</string>
     <string name="edit">EDIT</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
 </resources>

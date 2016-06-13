@@ -12,4 +12,6 @@ public interface ServiceRealm {
     User getUserFromDb(String userId);
 
     void removeUser(String mI);
+
+    void editUser(User mUser);
 }
