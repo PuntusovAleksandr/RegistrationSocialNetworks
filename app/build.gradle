@@ -62,4 +62,7 @@ dependencies {
     compile('com.twitter.sdk.android:twitter:1.13.2@aar') {
         transitive = true;
     }
+
+
+    compile 'com.android.support:support-v13:23.4.0'
 }

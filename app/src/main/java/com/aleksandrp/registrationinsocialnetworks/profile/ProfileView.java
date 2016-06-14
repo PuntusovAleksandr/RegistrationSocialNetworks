@@ -12,4 +12,7 @@ public interface ProfileView {
     void showDialog(User mUser);
 
     void updateUi();
+
+    void goToPhotoGallery();
+
 }

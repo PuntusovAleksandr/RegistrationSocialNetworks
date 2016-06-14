@@ -1,5 +1,6 @@
 package com.aleksandrp.registrationinsocialnetworks.profile;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 import com.aleksandrp.registrationinsocialnetworks.R;
 import com.aleksandrp.registrationinsocialnetworks.dialog.DialogEdit;
 import com.aleksandrp.registrationinsocialnetworks.entity.User;
+import com.aleksandrp.registrationinsocialnetworks.gallery.GalleryActivity;
 import com.aleksandrp.registrationinsocialnetworks.profile.impl.ProfilePresenterImpl;
 import com.aleksandrp.registrationinsocialnetworks.utils.StaticParams;
 import com.aleksandrp.registrationinsocialnetworks.utils.UtilsApp;
@@ -42,6 +44,7 @@ public class ProfileActivity extends AppCompatActivity implements
     private void initUi() {
         findViewById(R.id.bt_delete).setOnClickListener(this);
         findViewById(R.id.bt_edit).setOnClickListener(this);
+        findViewById(R.id.bt_gallery).setOnClickListener(this);
 
         ivIcon = (ImageView) findViewById(R.id.iv_icon);
 
@@ -61,6 +64,9 @@ public class ProfileActivity extends AppCompatActivity implements
                 break;
             case R.id.bt_edit:
                 mPresenter.showDialogEdit(mUser);
+                break;
+       case R.id.bt_gallery:
+                mPresenter.goToGallery( this);
                 break;
         }
     }
@@ -87,5 +93,14 @@ public class ProfileActivity extends AppCompatActivity implements
     @Override
     public void updateUi() {
         mPresenter.loadDataFromDb(ProfileActivity.this, this, id);
+    }
+
+    @Override
+    public void goToPhotoGallery() {
+        Intent mIntent = new Intent(ProfileActivity.this, GalleryActivity.class);
+        mIntent.putExtra(StaticParams.EXTRA_ID_USER, mUser.getId());
+
+        startActivity(mIntent);
+
     }
 }

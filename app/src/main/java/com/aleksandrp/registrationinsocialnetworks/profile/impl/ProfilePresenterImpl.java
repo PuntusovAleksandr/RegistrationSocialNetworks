@@ -45,4 +45,10 @@ public class ProfilePresenterImpl implements ProfilePresenter {
         mRealm.editUser(mUser);
         mPresenter.closeDialog();
     }
+
+    @Override
+    public void goToGallery(ProfileView mProfileView) {
+        mProfileView.goToPhotoGallery();
+    }
+
 }

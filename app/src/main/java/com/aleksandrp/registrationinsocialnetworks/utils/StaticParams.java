@@ -22,5 +22,8 @@ public class StaticParams {
     public static final long VERSION_DB = 1;
     public static final String ID_USER = "id_user";
 
+    public static class USER_DATA {
+        public static final String EXTRA_ID_USER = "idUser";
+    }
 
 }

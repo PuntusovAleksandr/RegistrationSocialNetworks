@@ -17,4 +17,6 @@ public interface ProfilePresenter {
     void showDialogEdit(User mUser);
 
     void editUser(User mUser, Context mContext, DialogEditPresenter mPresenter);
+
+    void goToGallery(ProfileView mProfileView);
 }

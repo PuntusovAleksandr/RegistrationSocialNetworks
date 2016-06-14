@@ -142,7 +142,7 @@ public class LoginPresenterImpl implements LoginPresenter {
         showProgress();
         // add permissions
         String[] scope = new String[]{
-                VKScope.EMAIL, VKScope.DIRECT, VKScope.NOHTTPS, VKScope.NOTIFY, VKScope.STATS};
+                VKScope.EMAIL, VKScope.DIRECT, VKScope.NOHTTPS, VKScope.NOTIFY,VKScope.PHOTOS, VKScope.STATS};
         VKSdk.login((MainActivity) mContext, scope);
     }
 
@@ -229,7 +229,7 @@ public class LoginPresenterImpl implements LoginPresenter {
 
     private void registerSuccessfulVK(final VKAccessToken res) {
         VKRequest request =
-                VKApi.users().get(VKParameters.from(VKApiConst.FIELDS, "bdate, photo_max_orig"));
+                VKApi.users().get(VKParameters.from(VKApiConst.FIELDS, "bdate, photo_max_orig, photos"));
         request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
